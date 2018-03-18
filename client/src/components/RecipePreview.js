@@ -11,8 +11,8 @@ class RecipePreview extends Component {
 
   render() {
     return (
-      <Link to={this.props.permalink} className="RecipePreview" style={styles.container}>
-        <div style={{ ...styles.image, backgroundImage: 'url(' + this.props.image + ')' }}></div>
+      <Link to={String(this.props.id)} className="RecipePreview" style={styles.container}>
+        <div style={{ ...styles.image, backgroundImage: 'url(http://localhost:5000' + this.props.image + ')' }}></div>
         <div style={styles.details}>
           <h3>{this.props.name}</h3>
           <small style={styles.time}>{this.props.time} Minuten</small>

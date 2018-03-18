@@ -6,6 +6,7 @@ from server import db
 class Recipe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150), nullable=False)
+    image = db.Column(db.String(150))
     time = db.Column(db.Integer())
     ingredients = db.Column(db.String())
     instructions = db.Column(db.String())
@@ -17,6 +18,7 @@ class Recipe(db.Model):
         return {
             "id": self.id,
             "name": self.name,
+            "image": self.image,
             "time": self.time,
             "ingredients": json.loads(self.ingredients),
             "instructions": json.loads(self.instructions)

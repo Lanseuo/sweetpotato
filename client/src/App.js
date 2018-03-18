@@ -17,7 +17,7 @@ class App extends Component {
             <Switch>
               <Route path="/" exact strict component={Home}/>
               <Route path="/create" exact strict component={CreateRecipe}/>
-              <Route path="/:permalink" exact strict component={Recipe}/>
+              <Route path="/:id" exact strict component={Recipe}/>
             </Switch>
           </main>
         </div>

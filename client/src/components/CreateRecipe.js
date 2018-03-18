@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import FloatingActionButton from './FloatingActionButton'
 import './../CreateRecipe.css'
 
@@ -7,13 +8,15 @@ class CreateRecipe extends Component {
     super();
     this.state = {
       image: null,
-      imagePreview: null
+      imagePreview: null,
+      nameInput: '',
+      timeInput: '',
+      ingredientsInput: '',
+      instructionsInput: ''
     }
   }
 
   onfileChange(e) {
-    // e.preventDefault();
-    console.log(e.target.files[0]);
     this.setState({ image: e.target.files[0] });
 
     // Show image preview
@@ -24,6 +27,27 @@ class CreateRecipe extends Component {
     reader.readAsDataURL(e.target.files[0]);
   }
 
+  submit() {
+    var formData = new FormData();
+    formData.append('name', this.state.nameInput);
+    formData.append('time', this.state.timeInput);
+    formData.append('ingredients', this.state.ingredientsInput);
+    formData.append('instructions', this.state.instructionsInput);
+
+    // If photo has been set
+    if (this.state.image) {
+      formData.append('image', this.state.image, this.state.image.name)
+    }
+
+    axios.post('http://localhost:5000/recipes', formData, { headers: { 'content-type': 'multipart/form-data' } })
+      .then(response => {
+        this.props.history.push(String(response.data.id))
+      })
+      .catch(e => {
+        console.log(e);
+      })
+  }
+
   render() {
     var placeholderInstructions = 'Die Süßkartoffel und die Möhren schälen und in 2 cm große Würfel schneiden. Den Ingwer schälen und fein würfeln oder raspeln, die Zwiebel und den Knoblauch abziehen und in feine Würfel schneiden.\n\nKokosöl in einer großen Pfanne erhitzen und Zwiebel, Knoblauch und Ingwer darin glasig werden lassen. Die Würfel von Süßkartoffel und Möhren hinzugeben und kurz anbraten. Erst das Currypulver und dann die Currypaste hinzugeben und beides ein wenig mitrösten.\n\nDie Brühe hinzugeben und alles einkochen lassen, sodass sich der Bodensatz von der Pfanne löst. Dann die Kokosmilch hineingeben und mit Salz, Pfeffer und etwas Sojasauce abschmecken.\n\nDas Curry etwa 15 bis 20 Minuten weiter köcheln lassen, bis die Möhren und die Süßkartoffeln gar sind. Währenddessen die Kichererbsen abgießen und abspülen und die Cashews in einer beschichteten Pfanne fettfrei anrösten. Die Kichererbsen und die Cashews erst zum Schluss der Garzeit unter das Curry rühren. Servieren und mit Koriander garnieren.'
 
@@ -32,7 +56,7 @@ class CreateRecipe extends Component {
         <h1>Create Recipe</h1>
 
         <p>Name</p>
-        <input style={styles.input} type="text" placeholder="Name"/>
+        <input value={this.state.nameInput} onChange={(event) => this.setState({nameInput: event.target.value})} style={styles.input} type="text" placeholder="Name"/>
 
         <p>Image</p>
         {!this.state.image || <div v-if="imagePreview" style={{backgroundImage: 'url(' + this.state.imagePreview + ')'}} className="image-preview"></div>}
@@ -46,13 +70,26 @@ class CreateRecipe extends Component {
           <input type="file" ref={input => {this.fileInput = input;}} onChange={this.onfileChange.bind(this)} accept="image/*"/>
         </div>
 
+        <p>Time (in minutes)</p>
+        <input value={this.state.timeInput} onChange={(event) => this.setState({timeInput: event.target.value})} style={styles.input} type="number" placeholder="Time (in minutes)"/>
+
         <p>Ingredients</p>
-        <textarea style={styles.input} rows="10" placeholder="1 TL: Chiasamen&#10;100g: Sojadrink&#10;1 Msp: Zimt"></textarea>
+        <textarea
+          value={this.state.ingredientsInput}
+          onChange={(event) => this.setState({ingredientsInput: event.target.value})}
+          style={styles.input}
+          rows="10"
+          placeholder="1 TL: Chiasamen&#10;100g: Sojadrink&#10;1 Msp: Zimt"></textarea>
 
         <p>Instructions</p>
-        <textarea rows="20" style={styles.input} placeholder={placeholderInstructions}></textarea>
+        <textarea
+          value={this.state.instructionsInput}
+          onChange={(event) => this.setState({instructionsInput: event.target.value})}
+          rows="20"
+          style={styles.input}
+          placeholder={placeholderInstructions}></textarea>
 
-        <FloatingActionButton type="save"/>
+        <FloatingActionButton onClick={this.submit.bind(this)} type="save"/>
       </div>
     )
   }
