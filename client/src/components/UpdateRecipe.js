@@ -16,6 +16,44 @@ class CreateRecipe extends Component {
     }
   }
 
+  componentWillMount() {
+    let id = this.props.match.params.id;
+
+    axios.get('http://localhost:5000/recipes/' + id)
+      .then(response => {
+        var ingredientsInput = ''
+        for (var i in response.data.ingredients) {
+          // not last instruction
+          if (parseInt(i) + 1 !== response.data.ingredients.length) {
+            ingredientsInput += response.data.ingredients[i].amount + ': ' + response.data.ingredients[i].ingredient + '\n'
+          } else {
+            ingredientsInput += response.data.ingredients[i].amount + ': ' + response.data.ingredients[i].ingredient
+          }
+        }
+
+        var instructionsInput = ''
+        for (var i in response.data.instructions) {
+          // not last instruction
+          if (parseInt(i) + 1 !== response.data.instructions.length) {
+            instructionsInput += response.data.instructions[i] + '\n\n'
+          } else {
+            instructionsInput += response.data.instructions[i]
+          }
+        }
+
+        this.setState({
+          nameInput: response.data.name,
+          imagePreview: 'http://localhost:5000' + response.data.image,
+          timeInput: response.data.time,
+          ingredientsInput,
+          instructionsInput
+        })
+      })
+      .catch(e => {
+        console.error(e);
+      })
+  }
+
   onfileChange(e) {
     this.setState({ image: e.target.files[0] });
 
@@ -39,12 +77,12 @@ class CreateRecipe extends Component {
       formData.append('image', this.state.image, this.state.image.name)
     }
 
-    axios.post('http://localhost:5000/recipes', formData, { headers: { 'content-type': 'multipart/form-data' } })
+    axios.put('http://localhost:5000/recipes/' + this.props.match.params.id, formData, { headers: { 'content-type': 'multipart/form-data' } })
       .then(response => {
         this.props.history.push('/' + String(response.data.id))
       })
       .catch(e => {
-        console.log(e);
+        console.log(e.response.data.error);
       })
   }
 
@@ -59,7 +97,7 @@ class CreateRecipe extends Component {
         <input value={this.state.nameInput} onChange={(event) => this.setState({nameInput: event.target.value})} style={styles.input} type="text" placeholder="Name"/>
 
         <p>Image</p>
-        {!this.state.image || <div v-if="imagePreview" style={{backgroundImage: 'url(' + this.state.imagePreview + ')'}} className="image-preview"></div>}
+        {!this.state.imagePreview || <div v-if="imagePreview" style={{backgroundImage: 'url(' + this.state.imagePreview + ')'}} className="image-preview"></div>}
         <div className="image-upload">
           <p>
             <span></span>

@@ -42,11 +42,12 @@ class RecipesList(Resource):
             # Generate random filename
             filename = str(uuid.uuid4()).replace("-", "") + "." + image.filename.split(".")[-1]
             image.save(os.path.join(app.static_folder + "/images", filename))
+            filename = "/static/images/" + filename
         else:
             filename = None
 
         recipe = Recipe(name=request.form.get("name"),
-                        image="/static/images/" + filename,
+                        image=filename,
                         time=request.form.get("time"),
                         ingredients=json.dumps(ingredients),
                         instructions=json.dumps(instructions))
@@ -58,4 +59,51 @@ class RecipesList(Resource):
 
 class Recipes(Resource):
     def get(self, recipe_id):
-        return Recipe.query.filter_by(id=recipe_id).first().to_public_json()
+        recipe = Recipe.query.filter_by(id=recipe_id).first()
+
+        if not recipe:
+            return {"error": "Recipe not found"}, 404
+
+        return recipe.to_public_json()
+
+    def put(self, recipe_id):
+        recipe = Recipe.query.filter_by(id=recipe_id)
+        if not recipe:
+            return {"error": "Recipe not found"}, 404
+
+        if request.form.get("name"):
+            recipe.update(dict(name=request.form.get("name")))
+
+        if request.form.get("time"):
+            recipe.update(dict(time=request.form.get("time")))
+
+        if request.form.get("ingredients"):
+            ingredients = []
+            try:
+                for i in request.form.get("ingredients").split("\r\n"):
+                    ingredients.append({
+                        "amount": i.split(": ")[0],
+                        "ingredient": i.split(": ")[1]
+                    })
+            except:
+                return {"error": "Unable to parse ingredients"}, 409
+            recipe.update(dict(ingredients=json.dumps(ingredients)))
+
+        if request.form.get("instructions"):
+            instructions = request.form.get("instructions").split("\r\n\r\n")
+            recipe.update(dict(instructions=json.dumps(instructions)))
+
+        image = request.files.get("image")
+        if image:
+            if not image.filename.endswith(tuple([".jpg", ".png"])):
+                return {"error": "Image is not valid"}, 409
+            # Generate random filename
+            filename = "".join(recipe.first().image.split("/")[3])
+            print(filename)
+            image.save(os.path.join(app.static_folder + "/images", filename))
+        else:
+            filename = None
+
+        db.session.commit()
+
+        return recipe.first().to_public_json()

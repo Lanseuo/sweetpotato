@@ -18,13 +18,15 @@ class RecipeGrid extends Component {
         })
       })
       .catch(e => {
-        console.log(e);
+        console.error(e.response.data.error);
       });
   }
 
   render() {
     return (
       <div className="RecipeGrid" style={styles.container}>
+
+        {Boolean(this.state.recipes.length == 0) && <p>No recipes found!</p>}
 
         {this.state.recipes.map(r => {
           return <RecipePreview name={r.name} image={r.image} time={r.time} id={r.id} key={r.id}/>

@@ -29,14 +29,18 @@ class Recipe extends Component {
         })
       })
       .catch(e => {
-        console.log(e);
+        console.error(e.response.data.error);
       })
   }
 
   render() {
     return (
       <div className="Recipe">
-        <img src={'http://localhost:5000' + this.state.image} alt={this.state.name} style={styles.image}/>
+        {/* Random number, otherwise site doesn't use new image, if it was updated */}
+        {this.state.image && <img
+          src={'http://localhost:5000' + this.state.image + '?_=' + Math.floor((Math.random() * 100) + 1) }
+          alt={this.state.name}
+          style={styles.image}/>}
         <h1 style={styles.heading}>{this.state.name}</h1>
         <p style={styles.time}>{this.state.time} Minuten</p>
 
@@ -60,7 +64,7 @@ class Recipe extends Component {
           ))}
         </table>
 
-        <FloatingActionButton type="edit"/>
+        <FloatingActionButton onClick={() => this.props.history.push(this.props.match.params.id + '/update')} type="edit"/>
       </div>
     )
   }
