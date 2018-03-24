@@ -1,5 +1,6 @@
 import json
 import os
+import time
 import uuid
 
 from flask import request
@@ -59,12 +60,15 @@ class RecipesList(Resource):
 
 class Recipes(Resource):
     def get(self, recipe_id):
-        recipe = Recipe.query.filter_by(id=recipe_id).first()
+        recipe = Recipe.query.filter_by(id=recipe_id)
 
         if not recipe:
             return {"error": "Recipe not found"}, 404
 
-        return recipe.to_public_json()
+        recipe.update(dict(last_access=time.time()))
+        db.session.commit()
+
+        return recipe.first().to_public_json()
 
     def put(self, recipe_id):
         recipe = Recipe.query.filter_by(id=recipe_id)

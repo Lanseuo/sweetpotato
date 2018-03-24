@@ -10,6 +10,7 @@ class Recipe(db.Model):
     time = db.Column(db.Integer())
     ingredients = db.Column(db.String())
     instructions = db.Column(db.String())
+    last_access = db.Column(db.Integer())
 
     def __repr__(self):
         return "<Recipe " + self.name + ">"
@@ -21,6 +22,7 @@ class Recipe(db.Model):
             "image": self.image,
             "time": self.time,
             "ingredients": json.loads(self.ingredients),
-            "instructions": json.loads(self.instructions)
+            "instructions": json.loads(self.instructions),
+            "lastAccess": self.last_access
         }
         # return {c.name: getattr(self, c.name) for c in self.__table__.columns}

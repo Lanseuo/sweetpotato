@@ -13,6 +13,17 @@ class RecipeGrid extends Component {
   componentWillMount() {
     axios.get('http://localhost:5000/recipes')
       .then(response => {
+        // Sort function by last access time
+        response.data.sort((a, b) => {
+          if (a.lastAccess < b.lastAccess) {
+            return 1;
+          }
+          if (a.lastAccess > b.lastAccess) {
+            return -1;
+          }
+          return 0;
+        })
+
         this.setState({
           recipes: response.data
         })
