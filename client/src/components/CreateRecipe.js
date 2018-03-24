@@ -11,6 +11,7 @@ class CreateRecipe extends Component {
       imagePreview: null,
       nameInput: '',
       timeInput: '',
+      servesInput: 1,
       ingredientsInput: '',
       instructionsInput: ''
     }
@@ -31,6 +32,7 @@ class CreateRecipe extends Component {
     var formData = new FormData();
     formData.append('name', this.state.nameInput);
     formData.append('time', this.state.timeInput);
+    formData.append('serves', this.state.servesInput);
     formData.append('ingredients', this.state.ingredientsInput);
     formData.append('instructions', this.state.instructionsInput);
 
@@ -71,7 +73,22 @@ class CreateRecipe extends Component {
         </div>
 
         <p>Time (in minutes)</p>
-        <input value={this.state.timeInput} onChange={(event) => this.setState({timeInput: event.target.value})} style={styles.input} type="number" placeholder="Time (in minutes)"/>
+        <input
+          value={this.state.timeInput}
+          onChange={(event) => this.setState({timeInput: event.target.value})}
+          style={styles.input}
+          type="number"
+          min="0"
+          placeholder="Time (in minutes)"/>
+
+        <p>Serves</p>
+        <input
+          value={this.state.servesInput}
+          onChange={(event) => this.setState({servesInput: event.target.value})}
+          style={styles.input}
+          type="number"
+          min="0"
+          placeholder="Serves"/>
 
         <p>Ingredients</p>
         <textarea

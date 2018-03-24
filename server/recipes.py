@@ -50,6 +50,7 @@ class RecipesList(Resource):
         recipe = Recipe(name=request.form.get("name"),
                         image=filename,
                         time=request.form.get("time"),
+                        serves=request.form.get("serves"),
                         ingredients=json.dumps(ingredients),
                         instructions=json.dumps(instructions))
         db.session.add(recipe)
@@ -80,6 +81,9 @@ class Recipes(Resource):
 
         if request.form.get("time"):
             recipe.update(dict(time=request.form.get("time")))
+
+        if request.form.get("serves"):
+            recipe.update(dict(serves=request.form.get("serves")))
 
         if request.form.get("ingredients"):
             ingredients = []

@@ -10,6 +10,7 @@ class Recipe extends Component {
       name: null,
       image: null,
       time: null,
+      serves: null,
       ingredients: [],
       instructions: []
     }
@@ -24,6 +25,7 @@ class Recipe extends Component {
           name: response.data.name,
           image: response.data.image,
           time: response.data.time,
+          serves: response.data.serves,
           ingredients: response.data.ingredients,
           instructions: response.data.instructions
         })
@@ -42,7 +44,7 @@ class Recipe extends Component {
           alt={this.state.name}
           style={styles.image}/>}
         <h1 style={styles.heading}>{this.state.name}</h1>
-        <p style={styles.time}>{this.state.time} Minuten</p>
+        <p style={styles.time}>{this.state.time} Minuten / {this.state.serves} Portionen</p>
 
         <h2>Zutaten</h2>
         <table>
