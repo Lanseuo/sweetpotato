@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import Radium from 'radium';
+import styleUtils from './../styleUtils';
 import { Link } from 'react-router-dom'
 
 class NavBar extends Component {
@@ -26,8 +28,11 @@ const styles = {
 
   heading: {
     color: 'white',
-    display: 'inline'
+    margin: 0,
+    [styleUtils.mediaQueries.mobile]: {
+      textAlign: 'center',
+    },
   }
 }
 
-export default NavBar;
+export default Radium(NavBar);

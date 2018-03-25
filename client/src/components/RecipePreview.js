@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
+import Radium from 'radium';
+import styleUtils from './../styleUtils';
 import { Link } from 'react-router-dom';
+
+// workaround, because <Link> cannot be styles with radiu,
+var LinkRadium = Radium(Link);
 
 class RecipePreview extends Component {
   constructor() {
@@ -11,13 +16,13 @@ class RecipePreview extends Component {
 
   render() {
     return (
-      <Link to={String(this.props.id)} className="RecipePreview" style={styles.container}>
-        <div style={{ ...styles.image, backgroundImage: 'url(http://localhost:5000' + this.props.image + ')' }}></div>
+      <LinkRadium to={String(this.props.id)} className="RecipePreview" style={styles.container}>
+        {this.props.image && <div style={{ ...styles.image, backgroundImage: 'url(http://localhost:5000' + this.props.image + ')' }}></div>}
         <div style={styles.details}>
           <h3>{this.props.name}</h3>
           <small style={styles.time}>{this.props.time} Minuten</small>
         </div>
-      </Link>
+      </LinkRadium>
     )
   }
 }
@@ -25,7 +30,11 @@ class RecipePreview extends Component {
 const styles = {
   container: {
     backgroundColor: 'rgb(237, 237, 237)',
-    borderRadius: '2px'
+    borderRadius: '2px',
+    [styleUtils.mediaQueries.mobile]: {
+      backgroundColor: 'transparent',
+      borderBottom: '1px solid rgb(173, 173, 173)'
+    },
   },
 
   image: {
@@ -33,13 +42,12 @@ const styles = {
     borderTopLeftRadius: '2px',
     width: '100%',
     height: '250px',
-    // backgroundImage: ,
     backgroundSize: 'cover',
     backgroundPosition: 'center'
   },
 
   details: {
-    padding: '10px'
+    padding: '10px',
   },
 
   time: {
@@ -48,4 +56,4 @@ const styles = {
   }
 }
 
-export default RecipePreview;
+export default Radium(RecipePreview);

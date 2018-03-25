@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {StyleRoot} from 'radium';
 import './App.css';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
@@ -11,6 +12,7 @@ import UpdateRecipe from './components/UpdateRecipe';
 class App extends Component {
   render() {
     return (
+      <StyleRoot>
       <BrowserRouter>
         <div className="App">
           <NavBar/>
@@ -24,6 +26,7 @@ class App extends Component {
           </main>
         </div>
       </BrowserRouter>
+      </StyleRoot>
     );
   }
 }

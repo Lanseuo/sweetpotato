@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import Radium from 'radium';
+import styleUtils from './../styleUtils'
 import axios from 'axios';
 import RecipePreview from './RecipePreview';
 
@@ -40,7 +42,12 @@ class RecipeGrid extends Component {
         {Boolean(this.state.recipes.length == 0) && <p>No recipes found!</p>}
 
         {this.state.recipes.map(r => {
-          return <RecipePreview name={r.name} image={r.image} time={r.time} id={r.id} key={r.id}/>
+          return <RecipePreview
+            name={r.name}
+            image={r.image}
+            time={r.time}
+            id={r.id}
+            key={r.id}/>
         })}
       </div>
     )
@@ -50,9 +57,12 @@ class RecipeGrid extends Component {
 const styles = {
   container: {
     display: 'grid',
+    [styleUtils.mediaQueries.mobile]: {
+      gridTemplateColumns: '1fr',
+    },
     gridTemplateColumns: 'repeat(4, 1fr)',
     gridGap: '25px'
   }
 }
 
-export default RecipeGrid;
+export default Radium(RecipeGrid);

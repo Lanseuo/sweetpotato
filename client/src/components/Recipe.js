@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import Radium from 'radium';
+import styleUtils from './../styleUtils';
 import axios from 'axios';
 import FloatingActionButton from './FloatingActionButton';
 
@@ -76,7 +78,10 @@ const styles = {
   image: {
     maxWidth: '50%',
     margin: '0 auto',
-    display: 'block'
+    display: 'block',
+    [styleUtils.mediaQueries.mobile]: {
+      maxWidth: '100%'
+    }
   },
 
   heading: {
@@ -103,4 +108,4 @@ const styles = {
   }
 }
 
-export default Recipe;
+export default Radium(Recipe);
