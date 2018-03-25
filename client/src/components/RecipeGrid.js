@@ -3,12 +3,14 @@ import Radium from 'radium';
 import styleUtils from './../styleUtils'
 import api from './../api';
 import RecipePreview from './RecipePreview';
+import Spinner from './Spinner'
 
 class RecipeGrid extends Component {
   constructor() {
     super();
     this.state = {
-      recipes: []
+      recipes: [],
+      loading: true
     }
   }
 
@@ -27,10 +29,12 @@ class RecipeGrid extends Component {
         })
 
         this.setState({
-          recipes: response.data
+          recipes: response.data,
+          loading: false
         })
       })
       .catch(e => {
+        this.setState({ loading: false })
         console.error(e.response.data.error);
       });
   }
@@ -38,24 +42,27 @@ class RecipeGrid extends Component {
   render() {
     return (
       <div className="RecipeGrid" style={styles.container}>
+        {this.state.loading && <Spinner/>}
 
-        {Boolean(this.state.recipes.length == 0) && <p>No recipes found!</p>}
+        {Boolean(this.state.recipes.length == 0) && !this.state.loading && <p>No recipes found!</p>}
 
-        {this.state.recipes.map(r => {
-          return <RecipePreview
-            name={r.name}
-            image={r.image}
-            time={r.time}
-            id={r.id}
-            key={r.id}/>
-        })}
+        <div style={styles.grid}>
+          {this.state.recipes.map(r => {
+            return <RecipePreview
+              name={r.name}
+              image={r.image}
+              time={r.time}
+              id={r.id}
+              key={r.id}/>
+          })}
+        </div>
       </div>
     )
   }
 }
 
 const styles = {
-  container: {
+  grid: {
     display: 'grid',
     [styleUtils.mediaQueries.mobile]: {
       gridTemplateColumns: '1fr',

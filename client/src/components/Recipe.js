@@ -3,6 +3,7 @@ import Radium from 'radium';
 import styleUtils from './../styleUtils';
 import FloatingActionButton from './FloatingActionButton';
 import api, { apiURL } from './../api'
+import Spinner from './Spinner'
 
 class Recipe extends Component {
   constructor() {
@@ -13,7 +14,8 @@ class Recipe extends Component {
       time: null,
       serves: null,
       ingredients: [],
-      instructions: []
+      instructions: [],
+      loading: true,
     }
   }
 
@@ -30,13 +32,23 @@ class Recipe extends Component {
           ingredients: response.data.ingredients,
           instructions: response.data.instructions
         })
+        this.setState({ loading: false })
       })
       .catch(e => {
+        this.setState({ loading: false })
         console.error(e.response.data.error);
       })
   }
 
   render() {
+    if (this.state.loading) {
+      return (
+        <div className="Recipe">
+          <Spinner/>
+        </div>
+      )
+    }
+
     return (
       <div className="Recipe">
         {/* Random number, otherwise site doesn't use new image, if it was updated */}

@@ -13,7 +13,8 @@ class CreateRecipe extends Component {
       timeInput: '',
       servesInput: 1,
       ingredientsInput: '',
-      instructionsInput: ''
+      instructionsInput: '',
+      loading: false
     }
   }
 
@@ -29,6 +30,7 @@ class CreateRecipe extends Component {
   }
 
   submit() {
+    this.setState({ loading: true });
     var formData = new FormData();
     formData.append('name', this.state.nameInput);
     formData.append('time', this.state.timeInput);
@@ -46,6 +48,7 @@ class CreateRecipe extends Component {
         this.props.history.push('/' + String(response.data.id))
       })
       .catch(e => {
+        this.setState({ loading: false })
         console.log(e);
       })
   }
@@ -106,7 +109,8 @@ class CreateRecipe extends Component {
           style={styles.input}
           placeholder={placeholderInstructions}></textarea>
 
-        <FloatingActionButton onClick={this.submit.bind(this)} type="save"/>
+        {!this.state.loading && <FloatingActionButton onClick={this.submit.bind(this)} type="save"/>}
+        {this.state.loading && <FloatingActionButton onClick={this.submit.bind(this)} type="loading"/>}
       </div>
     )
   }
