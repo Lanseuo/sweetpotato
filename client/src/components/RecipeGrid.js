@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Radium from 'radium';
 import styleUtils from './../styleUtils'
-import axios from 'axios';
+import api from './../api';
 import RecipePreview from './RecipePreview';
 
 class RecipeGrid extends Component {
@@ -13,7 +13,7 @@ class RecipeGrid extends Component {
   }
 
   componentWillMount() {
-    axios.get('http://localhost:5000/recipes')
+    api().get('recipes')
       .then(response => {
         // Sort function by last access time
         response.data.sort((a, b) => {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import api, { apiURL } from './../api';
 import FloatingActionButton from './FloatingActionButton'
 import './../CreateRecipe.css'
 
@@ -20,7 +20,7 @@ class CreateRecipe extends Component {
   componentWillMount() {
     let id = this.props.match.params.id;
 
-    axios.get('http://localhost:5000/recipes/' + id)
+    api().get('recipes/' + id)
       .then(response => {
         var ingredientsInput = ''
         for (var i in response.data.ingredients) {
@@ -44,7 +44,7 @@ class CreateRecipe extends Component {
 
         this.setState({
           nameInput: response.data.name,
-          imagePreview: 'http://localhost:5000' + response.data.image,
+          imagePreview: apiURL + response.data.image,
           timeInput: response.data.time,
           servesInput: response.data.serves,
           ingredientsInput,
@@ -80,7 +80,7 @@ class CreateRecipe extends Component {
       formData.append('image', this.state.image, this.state.image.name)
     }
 
-    axios.put('http://localhost:5000/recipes/' + this.props.match.params.id, formData, { headers: { 'content-type': 'multipart/form-data' } })
+    api().put('recipes/' + this.props.match.params.id, formData, { headers: { 'content-type': 'multipart/form-data' } })
       .then(response => {
         this.props.history.push('/' + String(response.data.id))
       })

@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import Radium from 'radium';
 import styleUtils from './../styleUtils';
-import axios from 'axios';
 import FloatingActionButton from './FloatingActionButton';
-
+import api, { apiURL } from './../api'
 
 class Recipe extends Component {
   constructor() {
@@ -21,7 +20,7 @@ class Recipe extends Component {
   componentWillMount() {
     let id = this.props.match.params.id;
 
-    axios.get('http://localhost:5000/recipes/' + id)
+    api().get('recipes/' + id)
       .then(response => {
         this.setState({
           name: response.data.name,
@@ -42,7 +41,7 @@ class Recipe extends Component {
       <div className="Recipe">
         {/* Random number, otherwise site doesn't use new image, if it was updated */}
         {this.state.image && <img
-          src={'http://localhost:5000' + this.state.image + '?_=' + Math.floor((Math.random() * 100) + 1) }
+          src={apiURL + this.state.image + '?_=' + Math.floor((Math.random() * 100) + 1) }
           alt={this.state.name}
           style={styles.image}/>}
         <h1 style={styles.heading}>{this.state.name}</h1>

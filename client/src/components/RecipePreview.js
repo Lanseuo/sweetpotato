@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Radium from 'radium';
 import styleUtils from './../styleUtils';
 import { Link } from 'react-router-dom';
+import { apiURL } from './../api';
 
 // workaround, because <Link> cannot be styles with radiu,
 var LinkRadium = Radium(Link);
@@ -17,7 +18,7 @@ class RecipePreview extends Component {
   render() {
     return (
       <LinkRadium to={String(this.props.id)} className="RecipePreview" style={styles.container}>
-        {this.props.image && <div style={{ ...styles.image, backgroundImage: 'url(http://localhost:5000' + this.props.image + ')' }}></div>}
+        {this.props.image && <div style={{ ...styles.image, backgroundImage: 'url(' + apiURL + this.props.image + ')' }}></div>}
         <div style={styles.details}>
           <h3>{this.props.name}</h3>
           <small style={styles.time}>{this.props.time} Minuten</small>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import FloatingActionButton from './FloatingActionButton'
 import './../CreateRecipe.css'
+import api from './../api'
 
 class CreateRecipe extends Component {
   constructor() {
@@ -41,7 +41,7 @@ class CreateRecipe extends Component {
       formData.append('image', this.state.image, this.state.image.name)
     }
 
-    axios.post('http://localhost:5000/recipes', formData, { headers: { 'content-type': 'multipart/form-data' } })
+    api().post('recipes', formData, { headers: { 'content-type': 'multipart/form-data' } })
       .then(response => {
         this.props.history.push('/' + String(response.data.id))
       })
