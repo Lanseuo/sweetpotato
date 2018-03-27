@@ -11,7 +11,7 @@ class Spinner extends Component {
   render() {
     console.log(this.props.onFAB);
     return (
-      <div className={this.props.onFAB == true ? 'Spinner onFAB' : 'Spinner'}>
+      <div className={this.props.onFAB === true ? 'Spinner onFAB' : 'Spinner'}>
         <div className="bounce1"></div>
         <div className="bounce2"></div>
         <div className="bounce3"></div>

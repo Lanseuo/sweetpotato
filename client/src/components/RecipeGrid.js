@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Radium from 'radium';
+import { connect } from 'react-redux';
 import styleUtils from './../styleUtils'
 import api from './../api';
 import RecipePreview from './RecipePreview';
@@ -44,7 +45,7 @@ class RecipeGrid extends Component {
       <div className="RecipeGrid" style={styles.container}>
         {this.state.loading && <Spinner/>}
 
-        {Boolean(this.state.recipes.length == 0) && !this.state.loading && <p>No recipes found!</p>}
+        {Boolean(this.state.recipes.length === 0) && !this.state.loading && <p>No recipes found!</p>}
 
         <div style={styles.grid}>
           {this.state.recipes.map(r => {
@@ -72,4 +73,10 @@ const styles = {
   }
 }
 
-export default Radium(RecipeGrid);
+const mapStateToProps = (state) => {
+  return {
+    search: state.reducer.search
+  }
+}
+
+export default connect(mapStateToProps)(Radium(RecipeGrid));

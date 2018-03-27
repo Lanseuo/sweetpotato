@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Radium from 'radium';
+import { connect } from 'react-redux';
 import styleUtils from './../styleUtils';
 import { Link } from 'react-router-dom'
 
@@ -8,7 +9,6 @@ class NavBar extends Component {
     super();
     this.state = {
       searchInputVisible: false,
-      search: ''
     }
   }
 
@@ -27,6 +27,10 @@ class NavBar extends Component {
     }
   }
 
+  onChangeInput(e) {
+    this.props.setSearch(e.target.value)
+  }
+
   render() {
     return (
       <nav className="NavBar" style={styles.container}>
@@ -37,8 +41,8 @@ class NavBar extends Component {
           </svg>
           <input
             onBlur={this.onBlurInput.bind(this)}
-            onChange={(e) => {this.setState({ search: e.target.value })}}
-            value={this.state.search}
+            onChange={this.onChangeInput.bind(this)}
+            value={this.props.search}
             ref={(input) => { this.searchInput = input; }}
             style={this.state.searchInputVisible ? { ...styles.searchInput, ...styles.searchInputVisible }
                                                  : { ...styles.searchInput }} type="search"/>
@@ -98,4 +102,21 @@ const styles = {
   }
 }
 
-export default Radium(NavBar);
+const mapStateToProps = (state) => {
+  return {
+    search: state.reducer.search
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setSearch: (search) => {
+      dispatch({
+        type: 'SET_SEARCH',
+        payload: search
+      })
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Radium(NavBar));
