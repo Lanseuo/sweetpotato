@@ -41,14 +41,19 @@ class RecipeGrid extends Component {
   }
 
   render() {
+    let filteredRecipes = this.state.recipes.filter(r => {
+      var s = this.props.search.toLowerCase()
+      return r.name.toLowerCase().includes(s) || r.ingredients.map(i => i.ingredient).join(' ').toLowerCase().includes(s)
+    })
+
     return (
       <div className="RecipeGrid" style={styles.container}>
         {this.state.loading && <Spinner/>}
 
-        {Boolean(this.state.recipes.length === 0) && !this.state.loading && <p>No recipes found!</p>}
+        {Boolean(filteredRecipes.length === 0) && !this.state.loading && <p>No recipes found!</p>}
 
         <div style={styles.grid}>
-          {this.state.recipes.map(r => {
+          {filteredRecipes.map(r => {
             return <RecipePreview
               name={r.name}
               image={r.image}

@@ -20,7 +20,7 @@ class NavBar extends Component {
   }
 
   onBlurInput() {
-    if (!this.state.search) {
+    if (!this.props.search) {
       this.setState({
         searchInputVisible: false
       })
@@ -92,7 +92,7 @@ const styles = {
     padding: 0,
     border: 0,
 
-    transition: 'width 0.1s ease-in-out'
+    transition: 'width 0.2s ease-in-out'
   },
 
   searchInputVisible: {
