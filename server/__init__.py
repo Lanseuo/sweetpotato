@@ -19,5 +19,41 @@ api.add_resource(Recipes, '/recipes/<recipe_id>')
 
 
 @app.route("/")
-def index():
-    return jsonify({})
+@app.route("/<path:path>")
+def index(path=None):
+    return app.send_static_file("frontend/index.html")
+
+
+@app.route("/static/css/<string:filename>")
+def static_css(filename):
+    return app.send_static_file("frontend/static/css/" + filename)
+
+
+@app.route("/static/js/<string:filename>")
+def static_js(filename):
+    return app.send_static_file("frontend/static/js/" + filename)
+
+
+@app.route("/manifest.json")
+def manifest_json():
+    return app.send_static_file("frontend/manifest.json")
+
+
+@app.route("/favicon.ico")
+def favicon_ico():
+    return app.send_static_file("frontend/manifest.ico")
+
+
+@app.route("/favicon-16x16.png")
+def favicon_16x16_png():
+    return app.send_static_file("frontend/favicon-16x16.png")
+
+
+@app.route("/favicon-32x32.png")
+def favicon_32x32_png():
+    return app.send_static_file("frontend/favicon-32x32.png")
+
+
+@app.route("/service-worker.js")
+def service_worker_js():
+    return app.send_static_file("frontend/service-worker.js")
