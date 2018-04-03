@@ -14,8 +14,8 @@ from .recipes import RecipesList, Recipes
 
 db.create_all()
 
-api.add_resource(RecipesList, '/recipes')
-api.add_resource(Recipes, '/recipes/<recipe_id>')
+api.add_resource(RecipesList, '/api/recipes')
+api.add_resource(Recipes, '/api/recipes/<recipe_id>')
 
 
 @app.route("/")

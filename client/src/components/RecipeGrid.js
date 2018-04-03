@@ -16,7 +16,7 @@ class RecipeGrid extends Component {
   }
 
   componentWillMount() {
-    api().get('recipes')
+    api().get('/recipes')
       .then(response => {
         // Sort function by last access time
         response.data.sort((a, b) => {

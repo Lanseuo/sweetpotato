@@ -43,7 +43,7 @@ class CreateRecipe extends Component {
       formData.append('image', this.state.image, this.state.image.name)
     }
 
-    api().post('recipes', formData, { headers: { 'content-type': 'multipart/form-data' } })
+    api().post('/recipes', formData, { headers: { 'content-type': 'multipart/form-data' } })
       .then(response => {
         this.props.history.push('/' + String(response.data.id))
       })
