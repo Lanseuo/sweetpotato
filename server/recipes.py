@@ -63,7 +63,7 @@ class Recipes(Resource):
     def get(self, recipe_id):
         recipe = Recipe.query.filter_by(id=recipe_id)
 
-        if not recipe:
+        if not recipe.first():
             return {"error": "Recipe not found"}, 404
 
         recipe.update(dict(last_access=time.time()))
@@ -73,7 +73,7 @@ class Recipes(Resource):
 
     def put(self, recipe_id):
         recipe = Recipe.query.filter_by(id=recipe_id)
-        if not recipe:
+        if not recipe.first():
             return {"error": "Recipe not found"}, 404
 
         if request.form.get("name"):
@@ -115,3 +115,13 @@ class Recipes(Resource):
         db.session.commit()
 
         return recipe.first().to_public_json()
+
+    def delete(self, recipe_id):
+        recipe = Recipe.query.filter_by(id=recipe_id).first()
+        if not recipe:
+            return {"error": "Recipe not found"}, 404
+
+        db.session.delete(recipe)
+        db.session.commit()
+
+        return {"done": True}

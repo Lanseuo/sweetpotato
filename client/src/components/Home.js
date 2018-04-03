@@ -14,7 +14,7 @@ class Home extends Component {
     return (
       <div className="Home">
         <RecipeGrid/>
-        <FloatingActionButton onClick={() => {this.props.history.push('create');}} type="create"/>
+        <FloatingActionButton onClick={() => {this.props.history.push('create');}} type="create" height={0}/>
       </div>
     )
   }

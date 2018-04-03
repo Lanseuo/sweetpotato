@@ -29,6 +29,14 @@ class FloatingActionButton extends Component {
           </svg>
         )
         break;
+      case 'delete':
+        icon = (
+          <svg fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+            <path d="M0 0h24v24H0z" fill="none"/>
+          </svg>
+        )
+        break;
       case 'loading':
         icon = (
           <Spinner onFAB={true}></Spinner>
@@ -36,10 +44,21 @@ class FloatingActionButton extends Component {
         break;
     }
 
+    var color;
+    if (this.props.color) {
+      switch (this.props.color) {
+        case 'red':
+          color = 'rgb(250, 52, 71)';
+          break;
+      }
+    } else {
+      color = 'rgb(93, 218, 118)'
+    }
+
     return (
       <div onClick={() => {
           this.props.onClick()
-        }} className="FloatingActionButton" style={styles.container}>
+        }} className="FloatingActionButton" style={{ ...styles.container, bottom: this.props.height * 70 + 35, backgroundColor: color }}>
         {icon}
       </div>
     )

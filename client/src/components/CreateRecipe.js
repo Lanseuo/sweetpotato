@@ -109,8 +109,8 @@ class CreateRecipe extends Component {
           style={styles.input}
           placeholder={placeholderInstructions}></textarea>
 
-        {!this.state.loading && <FloatingActionButton onClick={this.submit.bind(this)} type="save"/>}
-        {this.state.loading && <FloatingActionButton onClick={this.submit.bind(this)} type="loading"/>}
+        {!this.state.loading && <FloatingActionButton onClick={this.submit.bind(this)} type="save" height={0}/>}
+        {this.state.loading && <FloatingActionButton onClick={this.submit.bind(this)} type="loading" height={0}/>}
       </div>
     )
   }

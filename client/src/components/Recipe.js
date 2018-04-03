@@ -79,7 +79,7 @@ class Recipe extends Component {
           ))}
         </table>
 
-        <FloatingActionButton onClick={() => this.props.history.push(this.props.match.params.id + '/update')} type="edit"/>
+        <FloatingActionButton onClick={() => this.props.history.push(this.props.match.params.id + '/update')} type="edit" height={0}/>
       </div>
     )
   }
