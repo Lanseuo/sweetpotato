@@ -26,7 +26,7 @@ class UpdateRecipe extends Component {
     })
     let id = this.props.match.params.id;
 
-    api().get('/recipes/' + id)
+    api().get('/api/recipes/' + id)
       .then(response => {
         var ingredientsInput = ''
         for (var i in response.data.ingredients) {
@@ -94,7 +94,7 @@ class UpdateRecipe extends Component {
       formData.append('image', this.state.image, this.state.image.name)
     }
 
-    api().put('/recipes/' + this.props.match.params.id, formData, { headers: { 'content-type': 'multipart/form-data' } })
+    api().put('/api/recipes/' + this.props.match.params.id, formData, { headers: { 'content-type': 'multipart/form-data' } })
       .then(response => {
         this.setState({ saveLoading: false })
         this.props.history.push('/' + String(response.data.id))
@@ -109,7 +109,7 @@ class UpdateRecipe extends Component {
     this.setState({ deleteLoading: true })
     let doesUserRealyWantToDelete = window.confirm('Do you realy want to delete "' + this.state.nameInput + '"?')
     if (doesUserRealyWantToDelete) {
-      api().delete('/recipes/' + this.props.match.params.id)
+      api().delete('/api/recipes/' + this.props.match.params.id)
         .then(response => {
           this.setState({ deleteLoading: false })
           this.props.history.push('/')

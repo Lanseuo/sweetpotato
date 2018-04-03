@@ -105,9 +105,14 @@ class Recipes(Resource):
         if image:
             if not image.filename.endswith(tuple([".jpg", ".png"])):
                 return {"error": "Image is not valid"}, 409
-            # Generate random filename
-            filename = "".join(recipe.first().image.split("/")[3])
-            print(filename)
+
+            had_image_before = recipe.first().image
+            if had_image_before:
+                filename = "".join(recipe.first().image.split("/")[3])
+            else:
+                # Generate random filename
+                filename = str(uuid.uuid4()).replace("-", "") + "." + image.filename.split(".")[-1]
+
             image.save(os.path.join(app.static_folder + "/images", filename))
         else:
             filename = None

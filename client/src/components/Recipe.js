@@ -22,7 +22,7 @@ class Recipe extends Component {
   componentWillMount() {
     let id = this.props.match.params.id;
 
-    api().get('recipes/' + id)
+    api().get('/api/recipes/' + id)
       .then(response => {
         this.setState({
           name: response.data.name,
