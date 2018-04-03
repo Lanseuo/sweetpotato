@@ -29,6 +29,21 @@ install sweetPotatoe permanentely (on a server)
 
 [DEPLOYMENT.md](https://github.com/Lanseuo/sweetPotatoe/blob/master/DEPLOYMENT.md)
 
+## Update
+
+```
+cd sweetPotatoe
+. venv/bin/activate
+git pull
+python3 run.py build
+```
+
+on a server you have to restart supervisor too
+
+```
+supervisorctl restart sweetpotatoe
+```
+
 ## Made with
 
 - [Flask](http://flask.pocoo.org) - web framework
