@@ -27,10 +27,18 @@ class RecipesList(Resource):
         ingredients = []
         try:
             for i in request.form.get("ingredients").split("\r\n"):
-                ingredients.append({
-                    "amount": i.split(": ")[0],
-                    "ingredient": i.split(": ")[1]
-                })
+                if not i.strip():
+                    pass
+                elif ":" in i:
+                    ingredients.append({
+                        "amount": i.split(": ")[0].strip(),
+                        "ingredient": i.split(": ")[1].strip()
+                    })
+                else:
+                    ingredients.append({
+                        "amount": None,
+                        "ingredient": i.strip()
+                    })
         except:
             return {"error": "Unable to parse ingredients"}, 409
 
@@ -89,10 +97,18 @@ class Recipes(Resource):
             ingredients = []
             try:
                 for i in request.form.get("ingredients").split("\r\n"):
-                    ingredients.append({
-                        "amount": i.split(": ")[0],
-                        "ingredient": i.split(": ")[1]
-                    })
+                    if not i.strip():
+                        pass
+                    elif ":" in i:
+                        ingredients.append({
+                            "amount": i.split(": ")[0].strip(),
+                            "ingredient": i.split(": ")[1].strip()
+                        })
+                    else:
+                        ingredients.append({
+                            "amount": None,
+                            "ingredient": i.strip()
+                        })
             except:
                 return {"error": "Unable to parse ingredients"}, 409
             recipe.update(dict(ingredients=json.dumps(ingredients)))

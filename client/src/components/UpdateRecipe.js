@@ -30,11 +30,16 @@ class UpdateRecipe extends Component {
       .then(response => {
         var ingredientsInput = ''
         for (var i in response.data.ingredients) {
-          // not last instruction
-          if (parseInt(i) + 1 !== response.data.ingredients.length) {
-            ingredientsInput += response.data.ingredients[i].amount + ': ' + response.data.ingredients[i].ingredient + '\n'
-          } else {
+          // ingredient has amount
+          if (response.data.ingredients[i].amount) {
             ingredientsInput += response.data.ingredients[i].amount + ': ' + response.data.ingredients[i].ingredient
+          } else {
+            ingredientsInput += response.data.ingredients[i].ingredient
+          }
+
+          // not last ingredient
+          if (parseInt(i) + 1 !== response.data.ingredients.length) {
+            ingredientsInput += '\n'
           }
         }
 
