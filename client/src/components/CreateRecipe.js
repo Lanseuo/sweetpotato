@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import FloatingActionButton from './FloatingActionButton'
 import './../CreateRecipe.css'
 import api from './../api'
@@ -49,7 +50,10 @@ class CreateRecipe extends Component {
       })
       .catch(e => {
         this.setState({ loading: false })
-        console.log(e);
+        console.error(e)
+        if (e.response) {
+          this.props.showError(e.response.data.error)
+        }
       })
   }
 
@@ -127,4 +131,15 @@ const styles = {
   }
 }
 
-export default CreateRecipe;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    showError: (error) => {
+      dispatch({
+        type: 'SHOW_ERROR',
+        payload: error
+      })
+    }
+  }
+}
+
+export default connect(null, mapDispatchToProps)(CreateRecipe);

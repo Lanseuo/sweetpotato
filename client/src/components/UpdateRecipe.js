@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import api, { apiURL } from './../api';
 import FloatingActionButton from './FloatingActionButton'
 import './../CreateRecipe.css'
@@ -69,7 +70,10 @@ class UpdateRecipe extends Component {
           saveLoading: false,
           deleteLoading: false
         })
-        console.error(e);
+        console.error(e)
+        if (e.response) {
+          this.props.showError(e.response.data.error)
+        }
       })
   }
 
@@ -106,14 +110,17 @@ class UpdateRecipe extends Component {
       })
       .catch(e => {
         this.setState({ saveLoading: false })
-        console.log(e.response.data.error);
+        console.error(e)
+        if (e.response) {
+          this.props.showError(e.response.data.error)
+        }
       })
   }
 
   deleteRecipe() {
-    this.setState({ deleteLoading: true })
     let doesUserRealyWantToDelete = window.confirm('Do you realy want to delete "' + this.state.nameInput + '"?')
     if (doesUserRealyWantToDelete) {
+      this.setState({ deleteLoading: true })
       api().delete('/api/recipes/' + this.props.match.params.id)
         .then(response => {
           this.setState({ deleteLoading: false })
@@ -121,6 +128,10 @@ class UpdateRecipe extends Component {
         })
         .catch(e => {
           this.setState({ deleteLoading: false })
+          console.error(e)
+          if (e.response) {
+            this.props.showError(e.response.data.error)
+          }
         })
     }
   }
@@ -202,4 +213,15 @@ const styles = {
   }
 }
 
-export default UpdateRecipe;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    showError: (error) => {
+      dispatch({
+        type: 'SHOW_ERROR',
+        payload: error
+      })
+    }
+  }
+}
+
+export default connect(null, mapDispatchToProps)(UpdateRecipe);

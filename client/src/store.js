@@ -2,6 +2,7 @@ import { createStore, combineReducers } from 'redux';
 
 const reducer = (state = {
   search: '',
+  error: null
 }, action) => {
   switch (action.type) {
     case 'SET_SEARCH':
@@ -10,6 +11,11 @@ const reducer = (state = {
         search: action.payload
       };
       break;
+    case 'SHOW_ERROR':
+      state = {
+        ...state,
+        error: action.payload
+      }
   }
   return state
 };

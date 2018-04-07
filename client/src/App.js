@@ -8,6 +8,7 @@ import Home from './components/Home';
 import CreateRecipe from './components/CreateRecipe';
 import Recipe from './components/Recipe';
 import UpdateRecipe from './components/UpdateRecipe';
+import Error from './components/Error';
 
 class App extends Component {
   render() {
@@ -24,6 +25,7 @@ class App extends Component {
               <Route path="/:id" exact strict component={Recipe}/>
             </Switch>
           </main>
+          <Error/>
         </div>
       </BrowserRouter>
       </StyleRoot>

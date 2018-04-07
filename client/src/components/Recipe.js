@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Radium from 'radium';
 import styleUtils from './../styleUtils';
 import FloatingActionButton from './FloatingActionButton';
@@ -36,7 +37,10 @@ class Recipe extends Component {
       })
       .catch(e => {
         this.setState({ loading: false })
-        console.error(e.response.data.error);
+        console.error(e)
+        if (e.response) {
+          this.props.showError(e.response.data.error)
+        }
       })
   }
 
@@ -119,4 +123,15 @@ const styles = {
   }
 }
 
-export default Radium(Recipe);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    showError: (error) => {
+      dispatch({
+        type: 'SHOW_ERROR',
+        payload: error
+      })
+    }
+  }
+}
+
+export default connect(null, mapDispatchToProps)(Radium(Recipe));

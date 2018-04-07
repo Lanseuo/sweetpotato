@@ -36,7 +36,10 @@ class RecipeGrid extends Component {
       })
       .catch(e => {
         this.setState({ loading: false })
-        console.error(e.response.data.error);
+        console.error(e)
+        if (e.response) {
+          this.props.showError(e.response.data.error)
+        }
       });
   }
 
@@ -84,4 +87,15 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps)(Radium(RecipeGrid));
+const mapDispatchToProps = (dispatch) => {
+  return {
+    showError: (error) => {
+      dispatch({
+        type: 'SHOW_ERROR',
+        payload: error
+      })
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Radium(RecipeGrid));

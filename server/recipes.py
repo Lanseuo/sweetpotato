@@ -26,7 +26,8 @@ class RecipesList(Resource):
 
         ingredients = []
         try:
-            for i in request.form.get("ingredients").split("\r\n"):
+            linenumber = 0
+            for linenumber, i in enumerate(request.form.get("ingredients").split("\r\n")):
                 if not i.strip():
                     pass
                 elif ":" in i:
@@ -40,7 +41,8 @@ class RecipesList(Resource):
                         "ingredient": i.strip()
                     })
         except:
-            return {"error": "Unable to parse ingredients"}, 409
+            return {"error": "Unable to parse ingredients (line {line})"
+                    .format(line=linenumber+1)}, 409
 
         instructions = request.form.get("instructions").split("\r\n\r\n")
 
@@ -95,8 +97,9 @@ class Recipes(Resource):
 
         if request.form.get("ingredients"):
             ingredients = []
+            linenumber = 0
             try:
-                for i in request.form.get("ingredients").split("\r\n"):
+                for linenumber, i in enumerate(request.form.get("ingredients").split("\r\n")):
                     if not i.strip():
                         pass
                     elif ":" in i:
@@ -110,7 +113,8 @@ class Recipes(Resource):
                             "ingredient": i.strip()
                         })
             except:
-                return {"error": "Unable to parse ingredients"}, 409
+                return {"error": "Unable to parse ingredients (line {line})"
+                        .format(line=linenumber+1)}, 409
             recipe.update(dict(ingredients=json.dumps(ingredients)))
 
         if request.form.get("instructions"):
