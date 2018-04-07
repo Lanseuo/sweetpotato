@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import api, { apiURL } from './../api';
 import FloatingActionButton from './FloatingActionButton'
 import './../CreateRecipe.css'
+import Spinner from './Spinner'
 
 class UpdateRecipe extends Component {
   constructor() {
@@ -15,6 +16,7 @@ class UpdateRecipe extends Component {
       servesInput: '',
       ingredientsInput: '',
       instructionsInput: '',
+      initialLoading: false,
       saveLoading: false,
       deleteLoading: false
     }
@@ -22,8 +24,7 @@ class UpdateRecipe extends Component {
 
   componentWillMount() {
     this.setState({
-      saveLoading: true,
-      deleteLoading: true
+      initialLoading: true
     })
     let id = this.props.match.params.id;
 
@@ -61,15 +62,11 @@ class UpdateRecipe extends Component {
           servesInput: response.data.serves,
           ingredientsInput,
           instructionsInput,
-          saveLoading: false,
-          deleteLoading: false
+          initialLoading: false,
         })
       })
       .catch(e => {
-        this.setState({
-          saveLoading: false,
-          deleteLoading: false
-        })
+        this.setState({ initialLoading: false })
         console.error(e)
         if (e.response) {
           this.props.showError(e.response.data.error)
@@ -137,6 +134,10 @@ class UpdateRecipe extends Component {
   }
 
   render() {
+    if (this.state.initialLoading) {
+      return (<Spinner/>)
+    }
+
     var placeholderInstructions = 'Die Süßkartoffel und die Möhren schälen und in 2 cm große Würfel schneiden. Den Ingwer schälen und fein würfeln oder raspeln, die Zwiebel und den Knoblauch abziehen und in feine Würfel schneiden.\n\nKokosöl in einer großen Pfanne erhitzen und Zwiebel, Knoblauch und Ingwer darin glasig werden lassen. Die Würfel von Süßkartoffel und Möhren hinzugeben und kurz anbraten. Erst das Currypulver und dann die Currypaste hinzugeben und beides ein wenig mitrösten.\n\nDie Brühe hinzugeben und alles einkochen lassen, sodass sich der Bodensatz von der Pfanne löst. Dann die Kokosmilch hineingeben und mit Salz, Pfeffer und etwas Sojasauce abschmecken.\n\nDas Curry etwa 15 bis 20 Minuten weiter köcheln lassen, bis die Möhren und die Süßkartoffeln gar sind. Währenddessen die Kichererbsen abgießen und abspülen und die Cashews in einer beschichteten Pfanne fettfrei anrösten. Die Kichererbsen und die Cashews erst zum Schluss der Garzeit unter das Curry rühren. Servieren und mit Koriander garnieren.'
 
     return (
