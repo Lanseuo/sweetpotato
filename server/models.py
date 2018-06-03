@@ -27,4 +27,3 @@ class Recipe(db.Model):
             "instructions": json.loads(self.instructions),
             "lastAccess": self.last_access
         }
-        # return {c.name: getattr(self, c.name) for c in self.__table__.columns}

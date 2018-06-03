@@ -24,28 +24,6 @@ class RecipesList(Resource):
         if not request.form.get("instructions"):
             return {"error": "Instructions not specified"}, 409
 
-        ingredients = []
-        try:
-            linenumber = 0
-            for linenumber, i in enumerate(request.form.get("ingredients").split("\r\n")):
-                if not i.strip():
-                    pass
-                elif ":" in i:
-                    ingredients.append({
-                        "amount": i.split(": ")[0].strip(),
-                        "ingredient": i.split(": ")[1].strip()
-                    })
-                else:
-                    ingredients.append({
-                        "amount": None,
-                        "ingredient": i.strip()
-                    })
-        except:
-            return {"error": "Unable to parse ingredients (line {line})"
-                    .format(line=linenumber+1)}, 409
-
-        instructions = request.form.get("instructions").split("\r\n\r\n")
-
         image = request.files.get("image")
         if image:
             if not image.filename.endswith(tuple([".jpg", ".png"])):
@@ -58,12 +36,16 @@ class RecipesList(Resource):
         else:
             filename = None
 
-        recipe = Recipe(name=request.form.get("name"),
-                        image=filename,
-                        time=request.form.get("time"),
-                        serves=request.form.get("serves"),
-                        ingredients=json.dumps(ingredients),
-                        instructions=json.dumps(instructions))
+        # TODO: Check whether ingredients and instructions
+
+        recipe = Recipe(
+            name=request.form.get("name"),
+            image=filename,
+            time=request.form.get("time"),
+            serves=request.form.get("serves"),
+            ingredients=request.form.get("ingredients"),
+            instructions=request.form.get("instructions")
+        )
         db.session.add(recipe)
         db.session.commit()
 

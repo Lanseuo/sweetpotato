@@ -16,8 +16,7 @@ class CreateRecipe extends Component {
             timeInput: '',
             servesInput: 1,
             ingredientsInput: [
-                { amount: '5', ingredient: 'Soja', id: uuid.v4() },
-                { amount: '5', ingredient: 'Soja', id: uuid.v4() }
+                { amount: '', ingredient: '' },
             ],
             instructionsInput: '',
             loading: false
@@ -41,8 +40,8 @@ class CreateRecipe extends Component {
         formData.append('name', this.state.nameInput);
         formData.append('time', this.state.timeInput);
         formData.append('serves', this.state.servesInput);
-        formData.append('ingredients', this.state.ingredientsInput);
-        formData.append('instructions', this.state.instructionsInput);
+        formData.append('ingredients', JSON.stringify(this.state.ingredientsInput));
+        formData.append('instructions', JSON.stringify(this.state.instructionsInput.split('\n\n')));
 
         // If photo has been set
         if (this.state.image) {

@@ -5,10 +5,13 @@ import styleUtils from './../styleUtils';
 
 class IngredientsEditor extends Component {
     constructor(props) {
-        super(props);
-        this.state = {
+        // Add initial ids to ingredients
+        props.ingredients.forEach(ingredient => {
+            ingredient.id = uuid.v4()
+        })
+        props.onChange(props.ingredients);
 
-        }
+        super(props);
     }
 
     addNewIngredient() {
