@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {StyleRoot} from 'radium';
+import { StyleRoot } from 'radium';
 import './App.css';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
@@ -11,26 +11,26 @@ import UpdateRecipe from './components/UpdateRecipe';
 import Error from './components/Error';
 
 class App extends Component {
-  render() {
-    return (
-      <StyleRoot>
-      <BrowserRouter>
-        <div className="App">
-          <NavBar/>
-          <main>
-            <Switch>
-              <Route path="/" exact strict component={Home}/>
-              <Route path="/create" exact strict component={CreateRecipe}/>
-              <Route path="/:id/update" exact strict component={UpdateRecipe}/>
-              <Route path="/:id" exact strict component={Recipe}/>
-            </Switch>
-          </main>
-          <Error/>
-        </div>
-      </BrowserRouter>
-      </StyleRoot>
-    );
-  }
+    render() {
+        return (
+            <StyleRoot>
+                <BrowserRouter>
+                    <div className="App">
+                        <NavBar />
+                        <main>
+                            <Switch>
+                                <Route path="/" exact strict component={Home} />
+                                <Route path="/create" exact strict component={CreateRecipe} />
+                                <Route path="/:id/update" exact strict component={UpdateRecipe} />
+                                <Route path="/:id" exact strict component={Recipe} />
+                            </Switch>
+                        </main>
+                        <Error />
+                    </div>
+                </BrowserRouter>
+            </StyleRoot>
+        );
+    }
 }
 
 export default App;
