@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import FloatingActionButton from './FloatingActionButton';
+import { Prompt } from 'react-router-dom';
 import uuid from 'js-uuid';
+import FloatingActionButton from './FloatingActionButton';
 import './../CreateRecipe.css';
 import IngredientsEditor from './IngredientsEditor';
 import api from './../api';
@@ -19,7 +20,8 @@ class CreateRecipe extends Component {
                 { amount: '', ingredient: '' },
             ],
             instructionsInput: '',
-            loading: false
+            loading: false,
+            promptBeforeLeave: true
         }
     }
 
@@ -45,16 +47,17 @@ class CreateRecipe extends Component {
 
         // If photo has been set
         if (this.state.image) {
-            formData.append('image', this.state.image, this.state.image.name)
+            formData.append('image', this.state.image, this.state.image.name);
         }
 
         api().post('/api/recipes', formData, { headers: { 'content-type': 'multipart/form-data' } })
             .then(response => {
-                this.props.history.push('/' + String(response.data.id))
+                this.setState({ loading: true, promptBeforeLeave: false });
+                this.props.history.push('/' + String(response.data.id));
             })
             .catch(e => {
-                this.setState({ loading: false })
-                console.error(e)
+                this.setState({ loading: false });
+                console.error(e);
                 if (e.response) {
                     this.props.showError(e.response.data.error)
                 }
@@ -66,6 +69,11 @@ class CreateRecipe extends Component {
 
         return (
             <div className="CreateRecipe">
+                <Prompt
+                    when={this.state.promptBeforeLeave}
+                    message={'You have unsaved changes! Do you really want to leave?'}
+                />
+
                 <h1>Create Recipe</h1>
 
                 <p>Name</p>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Prompt } from 'react-router-dom';
 import api, { apiURL } from './../api';
 import FloatingActionButton from './FloatingActionButton';
 import './../CreateRecipe.css';
@@ -19,7 +20,8 @@ class UpdateRecipe extends Component {
             instructionsInput: '',
             initialLoading: false,
             saveLoading: false,
-            deleteLoading: false
+            deleteLoading: false,
+            promptBeforeLeave: true
         }
     }
 
@@ -88,7 +90,7 @@ class UpdateRecipe extends Component {
 
         api().put('/api/recipes/' + this.props.match.params.id, formData, { headers: { 'content-type': 'multipart/form-data' } })
             .then(response => {
-                this.setState({ saveLoading: false });
+                this.setState({ saveLoading: false, promptBeforeLeave: false });
                 this.props.history.push('/' + String(response.data.id));
             })
             .catch(e => {
@@ -101,12 +103,12 @@ class UpdateRecipe extends Component {
     }
 
     deleteRecipe() {
-        let doesUserRealyWantToDelete = window.confirm('Do you realy want to delete "' + this.state.nameInput + '"?')
+        let doesUserRealyWantToDelete = window.confirm(`Do you realy want to delete "${this.state.nameInput}"?`)
         if (doesUserRealyWantToDelete) {
             this.setState({ deleteLoading: true })
             api().delete('/api/recipes/' + this.props.match.params.id)
                 .then(response => {
-                    this.setState({ deleteLoading: false });
+                    this.setState({ deleteLoading: false, promptBeforeLeave: false });
                     this.props.history.push('/');
                 })
                 .catch(e => {
@@ -128,6 +130,11 @@ class UpdateRecipe extends Component {
 
         return (
             <div className="UpdateRecipe">
+                <Prompt
+                    when={this.state.promptBeforeLeave}
+                    message={'You have unsaved changes! Do you really want to leave?'}
+                />
+
                 <h1>Update Recipe</h1>
 
                 <p>Name</p>
