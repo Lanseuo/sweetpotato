@@ -4,6 +4,7 @@ import api, { apiURL } from './../api';
 import FloatingActionButton from './FloatingActionButton';
 import './../CreateRecipe.css';
 import Spinner from './Spinner';
+import IngredientsEditor from './IngredientsEditor';
 
 class UpdateRecipe extends Component {
     constructor() {
@@ -30,22 +31,7 @@ class UpdateRecipe extends Component {
 
         api().get('/api/recipes/' + id)
             .then(response => {
-                var ingredientsInput = ''
-                for (var i in response.data.ingredients) {
-                    // ingredient has amount
-                    if (response.data.ingredients[i].amount) {
-                        ingredientsInput += response.data.ingredients[i].amount + ': ' + response.data.ingredients[i].ingredient
-                    } else {
-                        ingredientsInput += response.data.ingredients[i].ingredient
-                    }
-
-                    // not last ingredient
-                    if (parseInt(i) + 1 !== response.data.ingredients.length) {
-                        ingredientsInput += '\n'
-                    }
-                }
-
-                var instructionsInput = ''
+                var instructionsInput = '';
                 for (var i in response.data.instructions) {
                     // not last instruction
                     if (parseInt(i) + 1 !== response.data.instructions.length) {
@@ -60,7 +46,7 @@ class UpdateRecipe extends Component {
                     imagePreview: apiURL + response.data.image,
                     timeInput: response.data.time,
                     servesInput: response.data.serves,
-                    ingredientsInput,
+                    ingredientsInput: response.data.ingredients,
                     instructionsInput,
                     initialLoading: false,
                 })
@@ -92,24 +78,24 @@ class UpdateRecipe extends Component {
         formData.append('name', this.state.nameInput);
         formData.append('time', this.state.timeInput);
         formData.append('serves', this.state.servesInput);
-        formData.append('ingredients', this.state.ingredientsInput);
-        formData.append('instructions', this.state.instructionsInput);
+        formData.append('ingredients', JSON.stringify(this.state.ingredientsInput));
+        formData.append('instructions', JSON.stringify(this.state.instructionsInput.split('\n\n')));
 
         // If photo has been set
         if (this.state.image) {
-            formData.append('image', this.state.image, this.state.image.name)
+            formData.append('image', this.state.image, this.state.image.name);
         }
 
         api().put('/api/recipes/' + this.props.match.params.id, formData, { headers: { 'content-type': 'multipart/form-data' } })
             .then(response => {
-                this.setState({ saveLoading: false })
-                this.props.history.push('/' + String(response.data.id))
+                this.setState({ saveLoading: false });
+                this.props.history.push('/' + String(response.data.id));
             })
             .catch(e => {
                 this.setState({ saveLoading: false })
                 console.error(e)
                 if (e.response) {
-                    this.props.showError(e.response.data.error)
+                    this.props.showError(e.response.data.error);
                 }
             })
     }
@@ -120,14 +106,14 @@ class UpdateRecipe extends Component {
             this.setState({ deleteLoading: true })
             api().delete('/api/recipes/' + this.props.match.params.id)
                 .then(response => {
-                    this.setState({ deleteLoading: false })
-                    this.props.history.push('/')
+                    this.setState({ deleteLoading: false });
+                    this.props.history.push('/');
                 })
                 .catch(e => {
                     this.setState({ deleteLoading: false })
-                    console.error(e)
+                    console.error(e);
                     if (e.response) {
-                        this.props.showError(e.response.data.error)
+                        this.props.showError(e.response.data.error);
                     }
                 })
         }
@@ -178,12 +164,9 @@ class UpdateRecipe extends Component {
                     placeholder="Serves" />
 
                 <p>Ingredients</p>
-                <textarea
-                    value={this.state.ingredientsInput}
-                    onChange={(event) => this.setState({ ingredientsInput: event.target.value })}
-                    style={styles.input}
-                    rows="10"
-                    placeholder="1 TL: Chiasamen&#10;100g: Sojadrink&#10;1 Msp: Zimt"></textarea>
+                <IngredientsEditor
+                    ingredients={this.state.ingredientsInput}
+                    onChange={value => this.setState({ ingredientsInput: value })} />
 
                 <p>Instructions</p>
                 <textarea

@@ -1,4 +1,3 @@
-import json
 import os
 import time
 import uuid
@@ -8,6 +7,27 @@ from flask_restful import Resource
 
 from .models import Recipe
 from server import app, db
+
+
+def upload_image(image, filename=None):
+    image = request.files.get("image")
+    if not image:
+        return None, None
+
+    if filename:
+        filename = filename.split("/")[3]
+    else:
+        identifier = str(uuid.uuid4()).replace("-", "")
+        file_extension = image.filename.split(".")[-1]
+        filename = identifier + "." + file_extension
+
+    if not image.filename.endswith(tuple([".jpg", ".png"])):
+        return {}, "Image is not valid"
+
+    image.save(os.path.join(app.static_folder + "/images", filename))
+    filename = "/static/images/" + filename
+
+    return filename, None
 
 
 class RecipesList(Resource):
@@ -24,19 +44,11 @@ class RecipesList(Resource):
         if not request.form.get("instructions"):
             return {"error": "Instructions not specified"}, 409
 
-        image = request.files.get("image")
-        if image:
-            if not image.filename.endswith(tuple([".jpg", ".png"])):
-                return {"error": "Image is not valid"}, 409
-            # Generate random filename
-            filename = str(uuid.uuid4()).replace("-", "") + \
-                "." + image.filename.split(".")[-1]
-            image.save(os.path.join(app.static_folder + "/images", filename))
-            filename = "/static/images/" + filename
-        else:
-            filename = None
+        filename, error = upload_image(request.files.get("image"))
+        if error:
+            return {"error": error}, 409
 
-        # TODO: Check whether ingredients and instructions
+        # TODO: Check whether ingredients and instructions have correct format
 
         recipe = Recipe(
             name=request.form.get("name"),
@@ -79,47 +91,17 @@ class Recipes(Resource):
             recipe.update(dict(serves=request.form.get("serves")))
 
         if request.form.get("ingredients"):
-            ingredients = []
-            linenumber = 0
-            try:
-                for linenumber, i in enumerate(request.form.get("ingredients").split("\r\n")):
-                    if not i.strip():
-                        pass
-                    elif ":" in i:
-                        ingredients.append({
-                            "amount": i.split(": ")[0].strip(),
-                            "ingredient": i.split(": ")[1].strip()
-                        })
-                    else:
-                        ingredients.append({
-                            "amount": None,
-                            "ingredient": i.strip()
-                        })
-            except:
-                return {"error": "Unable to parse ingredients (line {line})"
-                        .format(line=linenumber+1)}, 409
-            recipe.update(dict(ingredients=json.dumps(ingredients)))
+            recipe.update(dict(ingredients=request.form.get("ingredients")))
 
         if request.form.get("instructions"):
-            instructions = request.form.get("instructions").split("\r\n\r\n")
-            recipe.update(dict(instructions=json.dumps(instructions)))
+            recipe.update(dict(instructions=request.form.get("instructions")))
 
-        image = request.files.get("image")
-        if image:
-            if not image.filename.lower().endswith(tuple([".jpg", ".jpeg", ".png"])):
-                return {"error": "Image is not valid"}, 409
-
-            had_image_before = recipe.first().image
-            if had_image_before:
-                filename = "".join(recipe.first().image.split("/")[3])
-            else:
-                # Generate random filename
-                filename = str(uuid.uuid4()).replace("-", "") + \
-                    "." + image.filename.split(".")[-1]
-
-            image.save(os.path.join(app.static_folder + "/images", filename))
-        else:
-            filename = None
+        filename, error = upload_image(
+            request.files.get("image"), recipe.first().image)
+        if error:
+            return {"error": error}, 409
+        if filename:
+            recipe.update(dict(image=filename))
 
         db.session.commit()
 
