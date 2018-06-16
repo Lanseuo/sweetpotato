@@ -4,6 +4,7 @@ import uuid
 
 from flask import request
 from flask_restful import Resource
+from pathlib import Path
 
 from .models import Recipe
 from server import app, db
@@ -111,6 +112,10 @@ class Recipes(Resource):
         recipe = Recipe.query.filter_by(id=recipe_id).first()
         if not recipe:
             return {"error": "Recipe not found"}, 404
+
+        image = Path(os.path.abspath(__file__)).parent / recipe.image[1:]
+        if image.exists:
+            os.remove(str(image))
 
         db.session.delete(recipe)
         db.session.commit()
