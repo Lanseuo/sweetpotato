@@ -20,13 +20,13 @@ def upload_image(image, filename=None):
     else:
         identifier = str(uuid.uuid4()).replace("-", "")
         file_extension = image.filename.split(".")[-1]
-        filename = identifier + "." + file_extension
+        filename = f"{identifier}.{file_extension}"
 
     if not image.filename.endswith(tuple([".jpg", ".png"])):
         return {}, "Image is not valid"
 
-    image.save(os.path.join(app.static_folder + "/images", filename))
-    filename = "/static/images/" + filename
+    image.save(os.path.join(f"{app.static_folder}/images", filename))
+    filename = f"/static/images/{filename}"
 
     return filename, None
 

@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 CORS(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../sweet_potatoe.db'
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///../sweet_potato.db"
 db = SQLAlchemy(app)
 api = Api(app)
 
@@ -14,8 +14,8 @@ from .recipes import RecipesList, Recipes
 
 db.create_all()
 
-api.add_resource(RecipesList, '/api/recipes')
-api.add_resource(Recipes, '/api/recipes/<recipe_id>')
+api.add_resource(RecipesList, "/api/recipes")
+api.add_resource(Recipes, "/api/recipes/<recipe_id>")
 
 
 @app.route("/")

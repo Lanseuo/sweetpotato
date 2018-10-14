@@ -1,6 +1,6 @@
 ![Header](header.png)
 
-# sweetPotatoe
+# sweetPotato
 
 ![](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)
 
@@ -9,15 +9,15 @@ A recipe manager built with ReactJS and Flask
 ## Installation
 
 ```
-git clone https://github.com/Lanseuo/sweetPotatoe
-cd sweetPotatoe
+git clone https://github.com/Lanseuo/sweetPotato
+cd sweetPotato
 pip install -r requirements.txt
 python3 run.py build
 ```
 
 ## Usage
 
-run sweetPotatoe for development
+run sweetPotato for development
 
 ```
 python3 run.py
@@ -25,14 +25,14 @@ python3 run.py
 
 ## Deployment
 
-install sweetPotatoe permanentely (on a server)
+install sweetPotato permanentely (on a server)
 
-[DEPLOYMENT.md](https://github.com/Lanseuo/sweetPotatoe/blob/master/DEPLOYMENT.md)
+[DEPLOYMENT.md](https://github.com/Lanseuo/sweetPotato/blob/master/DEPLOYMENT.md)
 
 ## Update
 
 ```
-cd sweetPotatoe
+cd sweetPotato
 . venv/bin/activate
 git pull
 python3 run.py build
@@ -41,7 +41,7 @@ python3 run.py build
 on a server you have to restart supervisor too
 
 ```
-supervisorctl restart sweetpotatoe
+supervisorctl restart sweetpotato
 ```
 
 ## Made with
@@ -55,5 +55,5 @@ supervisorctl restart sweetpotatoe
 
 ## Meta
 
-Lucas Hild - [https://lucas-hild.de](https://lucas.hild.de)  
+Lucas Hild - [https://lucas-hild.de](https://lucas-hild.de)  
 This project is licensed under the MIT License - see the LICENSE file for details

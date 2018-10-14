@@ -1,4 +1,4 @@
-# Deployment of sweetPotatoe
+# Deployment of sweetPotato
 
 ## Install dependencies
 
@@ -9,8 +9,8 @@ sudo apt-get install -y python python-pip python-virtualenv nginx gunicorn super
 ## Setup virtualenv
 
 ```
-git clone https://github.com/Lanseuo/sweetPotatoe
-cd sweetPotatoe
+git clone https://github.com/Lanseuo/sweetPotato
+cd sweetPotato
 virtualenv venv
 . venv/bin/activate
 pip install -r requirements.txt
@@ -22,12 +22,12 @@ python3 run.py build
 ```
 sudo /etc/init.d/nginx start
 sudo rm /etc/nginx/sites-enabled/default
-sudo touch /etc/nginx/sites-available/sweetpotatoe
-sudo ln -s /etc/nginx/sites-available/sweetpotatoe /etc/nginx/sites-enabled/sweetpotatoe
+sudo touch /etc/nginx/sites-available/sweetpotato
+sudo ln -s /etc/nginx/sites-available/sweetpotato /etc/nginx/sites-enabled/sweetpotato
 ```
 
 ```
-sudo nano /etc/nginx/sites-enabled/sweetpotatoe
+sudo nano /etc/nginx/sites-enabled/sweetpotato
 ```
 
 ```
@@ -47,18 +47,18 @@ sudo /etc/init.d/nginx restart
 ## Configure supervisor
 
 ```
-sudo nano /etc/supervisor/conf.d/sweetpotatoe.conf
+sudo nano /etc/supervisor/conf.d/sweetpotato.conf
 ```
 
 ```
-[program:sweetpotatoe]
+[program:sweetpotato]
 command = gunicorn run:app -b localhost:8456
-directory = /home/REPLACE-WITH-YOUR-USERNAME/sweetpotatoe
+directory = /home/REPLACE-WITH-YOUR-USERNAME/sweetpotato
 user = REPLACE-WITH-YOUR-USERNAME
 ```
 
 ```
 sudo supervisorctl reread
 sudo supervisorctl update
-sudo supervisorctl start sweetpotatoe
+sudo supervisorctl start sweetpotato
 ```
