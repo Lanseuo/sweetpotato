@@ -12,6 +12,7 @@ import (
 	"github.com/Lanseuo/sweetpotatoe/internal/auth"
 	"github.com/Lanseuo/sweetpotatoe/internal/database"
 	"github.com/go-chi/chi"
+	"github.com/go-chi/cors"
 )
 
 const defaultPort = "8090"
@@ -27,6 +28,12 @@ func main() {
 
 	router := chi.NewRouter()
 	router.Use(auth.Authenticate)
+
+	router.Use(cors.Handler(cors.Options{
+		AllowedOrigins: []string{"*"},
+		AllowedMethods: []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
+		AllowedHeaders: []string{"*"},
+	}))
 
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
 
