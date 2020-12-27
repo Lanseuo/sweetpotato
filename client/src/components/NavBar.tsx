@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 interface Props { }
@@ -10,6 +11,23 @@ const Container = styled.nav`
     color: white;
     text-align: left;
     padding: 5px 30px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    place-items: center start;
+
+    & ul {
+        list-style-type: none;
+        display: flex;
+        flex-direction: row;
+    }
+
+    & li {
+        margin-left: 25px;
+    }
+
+    & a {
+        text-decoration: none;
+    }
 `
 
 class NavBar extends Component<Props, State> {
@@ -24,6 +42,15 @@ class NavBar extends Component<Props, State> {
         return (
             <Container>
                 <h1>Sweetpotato</h1>
+
+                <ul>
+                    <li>
+                        <Link to="/recipes">All recipes</Link>
+                    </li>
+                    <li>
+                        <Link to="/recipes/create">Create new recipe</Link>
+                    </li>
+                </ul>
             </Container>
         )
     }

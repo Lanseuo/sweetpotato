@@ -1,7 +1,7 @@
 import React from 'react'
 import { useQuery } from 'react-apollo'
 import styled from 'styled-components'
-import { Recipes, RECIPES_QUERY } from '../graphql/recipes'
+import { Recipes as RecipesInterface, RECIPES_QUERY } from '../graphql/recipes'
 
 const Grid = styled.div`
     display: grid;
@@ -14,7 +14,7 @@ const RecipePreview = styled.div`
 `
 
 const Recipes = () => {
-    const { loading, error, data } = useQuery<Recipes>(RECIPES_QUERY)
+    const { loading, error, data } = useQuery<RecipesInterface>(RECIPES_QUERY)
 
     return (
         <section>

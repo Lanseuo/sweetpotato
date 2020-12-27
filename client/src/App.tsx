@@ -1,10 +1,10 @@
-import React from 'react';
-import './App.css';
+import React from 'react'
 import NavBar from './components/NavBar'
 import ApolloClient from 'apollo-boost'
 import { ApolloProvider } from 'react-apollo'
 import Recipes from './pages/Recipes'
 import CreateRecipe from './pages/CreateRecipe'
+import { BrowserRouter as Router, Switch, Route, Link, Redirect } from 'react-router-dom'
 
 const client = new ApolloClient({
     uri: 'http://localhost:8090/query'
@@ -13,11 +13,17 @@ const client = new ApolloClient({
 function App() {
     return (
         <ApolloProvider client={client}>
-            <div className="App">
-                <NavBar />
-                {/* <Recipes /> */}
-                <CreateRecipe />
-            </div>
+            <Router>
+                <div className="App">
+                    <NavBar />
+
+                    <Switch>
+                        <Redirect from="/" exact to="/recipes" />
+                        <Route path="/recipes" exact component={Recipes} />
+                        <Route path="/recipes/create" exact component={CreateRecipe} />
+                    </Switch>
+                </div>
+            </Router>
         </ApolloProvider>
     );
 }

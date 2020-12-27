@@ -13,3 +13,11 @@ section {
   max-width: 1500px;
   margin: 0 auto;
 }
+
+h2 {
+  text-align: center;
+}
+
+a {
+  color: white;
+}
