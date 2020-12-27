@@ -16,10 +16,10 @@ import (
 )
 
 func (r *mutationResolver) CreateRecipe(ctx context.Context, input model.NewRecipe) (*model.Recipe, error) {
-	_, ok := auth.UserID(ctx)
-	if !ok {
-		return &model.Recipe{}, errors.New("Access denied")
-	}
+	// _, ok := auth.UserID(ctx)
+	// if !ok {
+	// 	return &model.Recipe{}, errors.New("Access denied")
+	// }
 
 	var recipe recipes.Recipe
 	recipe.Title = input.Title
@@ -53,10 +53,10 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (string
 func (r *queryResolver) Recipes(ctx context.Context) ([]*model.Recipe, error) {
 	var result []*model.Recipe
 
-	_, ok := auth.UserID(ctx)
-	if !ok {
-		return result, errors.New("Access denied")
-	}
+	// _, ok := auth.UserID(ctx)
+	// if !ok {
+	// 	return result, errors.New("Access denied")
+	// }
 
 	recipes, err := recipes.List()
 	if err != nil {
@@ -67,6 +67,14 @@ func (r *queryResolver) Recipes(ctx context.Context) ([]*model.Recipe, error) {
 		result = append(result, &model.Recipe{ID: recipe.ID, Title: recipe.Title})
 	}
 	return result, nil
+}
+
+func (r *queryResolver) Recipe(ctx context.Context, id string) (*model.Recipe, error) {
+	recipe, err := recipes.Get(id)
+	if err != nil {
+		return &model.Recipe{}, err
+	}
+	return &model.Recipe{ID: id, Title: recipe.Title}, nil
 }
 
 // Mutation returns generated.MutationResolver implementation.

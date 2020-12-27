@@ -26,18 +26,11 @@ const Container = styled.nav`
     }
 
     & a {
-        text-decoration: none;
+        color: white;
     }
 `
 
 class NavBar extends Component<Props, State> {
-    constructor(props: Props) {
-        super(props)
-        this.state = {
-
-        }
-    }
-
     render() {
         return (
             <Container>

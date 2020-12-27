@@ -1,7 +1,8 @@
 import React from 'react'
 import { useQuery } from 'react-apollo'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-import { Recipes as RecipesInterface, RECIPES_QUERY } from '../graphql/recipes'
+import { GET_RECIPES_QUERY, GetRecipesData } from '../graphql/recipes'
 
 const Grid = styled.div`
     display: grid;
@@ -9,12 +10,13 @@ const Grid = styled.div`
     grid-gap: 10px;
 `
 
-const RecipePreview = styled.div`
+const RecipePreview = styled(Link)`
     background: white;
+    color: black;
 `
 
 const Recipes = () => {
-    const { loading, error, data } = useQuery<RecipesInterface>(RECIPES_QUERY)
+    const { loading, error, data } = useQuery<GetRecipesData>(GET_RECIPES_QUERY)
 
     return (
         <section>
@@ -25,7 +27,7 @@ const Recipes = () => {
             {data && (
                 <Grid>
                     {data.recipes.map(recipe => (
-                        <RecipePreview>
+                        <RecipePreview to={`/recipes/${recipe.id}`}>
                             <p>{recipe.id}</p>
                             <p>{recipe.title}</p>
                         </RecipePreview>

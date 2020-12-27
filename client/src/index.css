@@ -1,5 +1,6 @@
 :root {
   --primary-color: rgb(42, 197, 73);
+  --primary-color-dark: rgb(17, 170, 48);
 }
 
 body {
@@ -19,5 +20,6 @@ h2 {
 }
 
 a {
-  color: white;
+  text-decoration: none;
+  color: var(--primary-color);
 }

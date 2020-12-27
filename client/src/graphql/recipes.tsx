@@ -5,15 +5,11 @@ export interface Recipe {
     title: string
 }
 
-export interface Recipes {
-    recipes: Recipe[]
-}
-
 export interface NewRecipe {
     title: string
 }
 
-export const RECIPES_QUERY = gql`
+export const GET_RECIPES_QUERY = gql`
     query {
         recipes {
             id
@@ -21,6 +17,23 @@ export const RECIPES_QUERY = gql`
         }
     }
 `
+
+export interface GetRecipesData {
+    recipes: Recipe[]
+}
+
+export const GET_RECIPE_QUERY = gql`
+    query Recipe($id: ID!) {
+        recipe(id: $id) {
+            id
+            title
+        }
+    }
+`
+
+export interface GetRecipeData {
+    recipe: Recipe
+}
 
 export const CREATE_RECIPE_MUTATION = gql`
     mutation CreateRecipe($recipe: NewRecipe!) {

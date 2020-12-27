@@ -23,3 +23,15 @@ func List() ([]Recipe, error) {
 	`)
 	return recipes, err
 }
+
+func Get(id string) (Recipe, error) {
+	var recipe Recipe
+	err := database.DB.Get(&recipe, `
+		SELECT
+			id,
+			title
+		FROM recipe
+		WHERE id = $1
+	`, id)
+	return recipe, err
+}

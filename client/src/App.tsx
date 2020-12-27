@@ -3,8 +3,9 @@ import NavBar from './components/NavBar'
 import ApolloClient from 'apollo-boost'
 import { ApolloProvider } from 'react-apollo'
 import Recipes from './pages/Recipes'
+import Recipe from './pages/Recipe'
 import CreateRecipe from './pages/CreateRecipe'
-import { BrowserRouter as Router, Switch, Route, Link, Redirect } from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 
 const client = new ApolloClient({
     uri: 'http://localhost:8090/query'
@@ -20,6 +21,7 @@ function App() {
                     <Switch>
                         <Redirect from="/" exact to="/recipes" />
                         <Route path="/recipes" exact component={Recipes} />
+                        <Route path="/recipes/:id" exact component={Recipe} />
                         <Route path="/recipes/create" exact component={CreateRecipe} />
                     </Switch>
                 </div>
