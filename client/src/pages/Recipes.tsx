@@ -1,25 +1,7 @@
 import React from 'react'
 import { useQuery } from 'react-apollo'
-import gql from 'graphql-tag'
 import styled from 'styled-components'
-
-interface Recipe {
-    id: string
-    title: string
-}
-
-interface RecipesData {
-    recipes: Recipe[]
-}
-
-const RECIPES_QUERY = gql`
-    query {
-        recipes {
-            id
-            title
-        }
-    }
-`
+import { Recipes, RECIPES_QUERY } from '../graphql/recipes'
 
 const Grid = styled.div`
     display: grid;
@@ -32,9 +14,7 @@ const RecipePreview = styled.div`
 `
 
 const Recipes = () => {
-    const { loading, error, data } = useQuery<RecipesData>(
-        RECIPES_QUERY
-    )
+    const { loading, error, data } = useQuery<Recipes>(RECIPES_QUERY)
 
     return (
         <section>
