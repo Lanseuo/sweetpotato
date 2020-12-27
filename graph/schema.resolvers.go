@@ -16,10 +16,10 @@ import (
 )
 
 func (r *mutationResolver) CreateRecipe(ctx context.Context, input model.NewRecipe) (*model.Recipe, error) {
-	// _, ok := auth.UserID(ctx)
-	// if !ok {
-	// 	return &model.Recipe{}, errors.New("Access denied")
-	// }
+	_, ok := auth.UserID(ctx)
+	if !ok {
+		return &model.Recipe{}, utils.NewUserError(utils.ErrAuthorization)
+	}
 
 	var recipe recipes.Recipe
 	recipe.Title = input.Title
@@ -53,10 +53,10 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (string
 func (r *queryResolver) Recipes(ctx context.Context) ([]*model.Recipe, error) {
 	var result []*model.Recipe
 
-	// _, ok := auth.UserID(ctx)
-	// if !ok {
-	// 	return result, errors.New("Access denied")
-	// }
+	_, ok := auth.UserID(ctx)
+	if !ok {
+		return result, utils.NewUserError(utils.ErrAuthorization)
+	}
 
 	recipes, err := recipes.List()
 	if err != nil {
