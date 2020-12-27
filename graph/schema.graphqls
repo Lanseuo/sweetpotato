@@ -1,0 +1,33 @@
+type Recipe {
+  id: ID!
+  title: String!
+  user: User!
+}
+
+type User {
+  id: ID!
+}
+
+type Query {
+  recipes: [Recipe!]!
+}
+
+input NewRecipe {
+  title: String!
+}
+
+input NewUser {
+  email: String!
+  password: String!
+}
+
+input Login {
+  email: String!
+  password: String!
+}
+
+type Mutation {
+  createRecipe(input: NewRecipe!): Recipe!
+  createUser(input: NewUser!): User!
+  login(input: Login!): String!
+}
